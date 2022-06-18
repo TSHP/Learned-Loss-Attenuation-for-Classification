@@ -1,2 +1,2 @@
 # Learned-Loss-Attenuation-for-Classification
-PyTorch implementation of the segmentation loss function for Bayesian Segmentation as presented by Kendall and Gal (2017).
+PyTorch implementation of the learned loss attenuation for Bayesian classification as presented by Kendall and Gal (2017)
