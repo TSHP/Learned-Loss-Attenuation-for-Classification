@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from torch.nn.modules import Module
 
 
-class LearnedAttenuationLoss(Module):
+class AttenuationLoss(Module):
     r"""PyTorch implementation of the learned loss attentuation for Bayesian classification as presented by
         Kendall and Gal (2017).
 
@@ -25,7 +25,7 @@ class LearnedAttenuationLoss(Module):
             - output: Scalar loss value.
         """
     def __init__(self, *, eps: float = 1e-8, num_samples: int = 10, device=torch.device('cpu')) -> None:
-        super(LearnedAttenuationLoss, self).__init__()
+        super(AttenuationLoss, self).__init__()
         self.eps = eps
         self.T = num_samples
         self.device = device
