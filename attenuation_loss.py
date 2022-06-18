@@ -36,17 +36,13 @@ class AttenuationLoss(Module):
 
 def attenuation_loss(mu: torch.tensor, log_sigma: torch.tensor, target: torch.tensor, eps: float = 1e-8, T: int = 10,
              device=torch.device('cpu')):
-    # Compute standard deviation from the log standard deviation to sample from the Gaussian. Adding eps for numerical
-    # stability.
+    # Compute standard deviation from the log standard deviation to sample from the Gaussian.
     sigma = torch.exp(log_sigma) + eps
-    # Allocate memory for sampled logits. For memory efficiency the logits are summed over all samples insetead of
-    # saving T samples.
-    logit_sum = torch.zeros((target.size(0), 10, target.size(1), target.size(2)), device=device)
 
+    logit_sum = torch.zeros((target.size(0), 10, target.size(1), target.size(2)), device=device)
     # Sample T logits by corrupting the predicted mu with Gaussian noise with standard deviation sigma.
     for _ in range(T):
         logit_sum += torch.softmax(mu + torch.mul(sigma, torch.randn(sigma.size(), device=device)), dim=1)
 
     # Computing the negative log likelihood of the mean logit. Adding eps to avoid log(0).
-    # The nll_loss uses the reduction 'mean' as default.
-    return F.nll_loss(torch.log(logit_sum / T + eps), target)
+    return F.nll_loss(torch.log(logit_sum / T + eps), target, reduction="mean")
